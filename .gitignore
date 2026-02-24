@@ -1,0 +1,51 @@
+# Estimation outputs (user-generated, may contain sensitive project data)
+docs/estimations/*.pdf
+docs/estimations/*.docx
+docs/estimations/*.csv
+docs/estimations/*.json
+docs/estimations/estimation_*.md
+
+# Keep the built-in tools and examples
+!docs/estimations/generate-pdf.html
+!docs/estimations/example-*.md
+!docs/estimations/.gitkeep
+
+# Node modules (if project uses npm/pnpm)
+node_modules/
+.pnpm-store/
+
+# IDE files
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Environment variables (if any)
+.env
+.env.local
+.env.*.local
+
+# Build outputs (if project builds anything)
+dist/
+build/
+.output/
+.nuxt/
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
