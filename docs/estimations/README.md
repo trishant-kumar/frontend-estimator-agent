@@ -361,15 +361,6 @@ This folder contains a comprehensive estimation system that helps you provide **
 | Version | Date        | Changes                | Author |
 | ------- | ----------- | ---------------------- | ------ |
 | 1.0     | 24 Feb 2026 | Initial system created | -      |
-|         |             |                        |        |
-
----
-
-## 🎯 Remember
-
-> **"The 15 minutes you spend asking questions will save you 50+ hours of estimate corrections and scope discussions."**
-
-**Always ask first, estimate second. Never the other way around.**
 
 ---
 

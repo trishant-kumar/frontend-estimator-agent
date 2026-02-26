@@ -6,6 +6,8 @@
 
 ## 📐 PERT Three-Point Estimation
 
+**⚠️ NOTE: This method is NOT currently used by the agent. The agent uses Direct Estimation with pattern-based hours. This section is kept for reference for teams who prefer PERT methodology.**
+
 ### Formula
 
 ```
@@ -64,6 +66,8 @@ Complex: 2.5x
 ---
 
 ## 📊 Story Points to Hours Conversion
+
+**⚠️ NOTE: This method is NOT currently used by the agent. The agent estimates directly in hours, not story points. This section is kept for reference for teams who use story points and need conversion guidance.**
 
 ### Fibonacci Sequence
 
@@ -311,30 +315,17 @@ const patterns = {
 - [ ] **Reusability:** Applied 25% reduction only ONCE (across similar modules) — not applied per module AND globally
 - [ ] **Buffer:** Applied +10-25% buffer only ONCE at the end — not applied to base AND final total
 
-**Example of CORRECT Calculation:**
-
+**Correct Example:**
 ```
-Base Hours: 1,000 hr (6 modules, UI only, no tests, no RBAC, no real-time)
-× Reusability: 0.75 = 750 hr (25% reduction for similar modules)
-× Professional Dev: 1.20 = 900 hr (+20% for tests + edge cases)
-+ RBAC: +60 hr = 960 hr (system-wide permissions)
-+ Real-time: +40 hr = 1,000 hr (WebSocket notifications)
-+ Integrations: +50 hr = 1,050 hr (GPS + reports + maps)
-× Buffer: 1.10 = 1,155 hr (+10% for rework)
-───────────────────────────────────────
-Final: 1,155 hr (realistic production estimate)
+Base: 1,000 hr (UI only, no tests/RBAC) → Reusability: 0.75 = 750 hr
+→ × Testing: 1.20 = 900 hr → +RBAC: 60 hr → +Real-time: 40 hr
+→ +Integrations: 50 hr → × Buffer: 1.10 = 1,155 hr ✓
 ```
 
-**Example of WRONG Calculation (Double-Counting):**
-
+**Wrong Example (Double-Counting):**
 ```
-Base Hours: 1,000 hr (includes tests, RBAC, real-time) ❌
-× Reusability: 0.75 = 750 hr
-× Professional Dev: 1.20 = 900 hr ❌ (already in base)
-+ RBAC: +60 hr = 960 hr ❌ (already in base)
-+ Real-time: +40 hr = 1,000 hr ❌ (already in base)
-───────────────────────────────────────
-Final: 1,000 hr (inflated by ~300 hr of double-counting)
+Base: 1,000 hr (includes tests, RBAC) → × Testing: 1.20 ❌
+→ +RBAC: 60 hr ❌ → Final: inflated by ~300 hr
 ```
 
 ---

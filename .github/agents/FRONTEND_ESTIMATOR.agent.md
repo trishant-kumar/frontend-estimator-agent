@@ -214,6 +214,8 @@ const requiresIntegrations =
 
 **Example:** Vista Software (6 modules, 50+ pages). Base includes role admin UI (12 hr). RBAC overhead adds: Permission composables (15 hr), Route guards for all pages (12 hr), Conditional UI rendering (20 hr), Integration across modules (10 hr), Testing (3 hr) = 60 hr extra
 
+**📚 Detailed RBAC complexity levels (Basic +20hr, Advanced +60hr, Enterprise +80hr) in knowledge-base/01_estimation_methods.md lines 1023-1100**
+
 **3. Real-Time Features (+5-40 hr overhead):**
 
 - ❌ WebSocket connection setup - Base assumes polling/refresh
@@ -294,6 +296,25 @@ const requiresIntegrations =
 
 - If we ONLY did base (817 hr × 1.15 buffer = 940 hr) → Would have NO tests, NO RBAC, NO real-time → PRODUCTION DISASTER
 - Current formula (1,400 hr) → Production-ready with tests, security, real-time, integrations → REALISTIC
+
+**🚨 MANDATORY VALIDATION RULES - Flag estimates that are:**
+
+**Per-Component Validation:**
+- Login/Registration page > 30 hrs → 🚨 TOO HIGH (typical: 18-22 hrs)
+- Simple CRUD page > 25 hrs → 🚨 TOO HIGH (typical: 10-16 hrs)
+- Basic dashboard > 120 hrs → 🚨 TOO HIGH (typical: 60-100 hrs)
+- Data table > 30 hrs → 🚨 TOO HIGH (typical: 8-14 hrs with VDataTable)
+- Simple form < 4 hrs → 🚨 TOO LOW (minimum: 4-8 hrs includes validation + API)
+- Complex feature < 10 hrs → 🚨 TOO LOW (if called "complex", should be 20+ hrs)
+
+**Total Estimate Validation:**
+- Total hours per screen > 40 hrs average → 🚨 VERIFY (might be double-counting or overestimating)
+- Total hours per screen < 8 hrs average → 🚨 VERIFY (might be missing testing/RBAC/buffer)
+- RBAC overhead > 100 hrs → 🚨 VERIFY (unless 8+ modules, typical: 20-80 hrs)
+- Real-time overhead > 60 hrs → 🚨 VERIFY (unless multiple modules, typical: 5-40 hrs)
+- Total multiplier > 2.0x → 🚨 VERIFY (base × design × testing × buffer should be ~1.08-1.41x)
+
+**Action if validation fails:** Add warning to estimate: "⚠️ Validation Flag: [Component] estimate of [X] hrs exceeds typical range. Recommend review or provide justification in assumptions."
 
 ---
 
@@ -558,47 +579,16 @@ Before finalizing, clarify:
 
 ---
 
-## 📄 HOW TO GENERATE PDF (Always include these instructions after EVERY estimation)
+## 📄 Generate PDF
 
-**After providing the estimation, ALWAYS add this message:**
+**To create a professional PDF from the estimate above:**
 
-```
----
+1. Open `docs/estimations/generate-pdf.html` in your browser
+2. Copy the markdown estimation above and paste it in
+3. Click "Generate Preview" (or press Ctrl+Enter)
+4. Click "Generate PDF" and save
 
-## � Your Estimation Files
-
-I've created these files in `docs/estimations/`:
-✅ **Markdown** (`estimation_[Project]_[Date].md`) - Complete estimation
-✅ **CSV** (`estimation_[Project]_[Date].csv`) - Import to Excel/Sheets
-✅ **JSON** (`estimation_[Project]_[Date].json`) - For tools/automation
-
-### 📄 Generate PDF (Manual Process)
-
-To convert the markdown estimation to a professional PDF:
-
-**Quick Steps:**
-1. **Open** `docs/estimations/generate-pdf.html` in any browser (Chrome, Firefox, Safari, Edge)
-2. **Copy** the complete markdown estimation from above (or from the .md file)
-3. **Paste** into the "Markdown Input" panel (left side)
-4. **Click** "Generate Preview" to see formatted document (or press Ctrl+Enter)
-5. **Click** "Generate PDF" button
-6. **Save** using your browser's print dialog (Ctrl+P) → "Save as PDF"
-
-**Why Manual?** I can create markdown/CSV/JSON files directly, but PDF generation requires browser rendering. The built-in HTML generator makes this a 1-click process - no software installation needed!
-
-### ✨ Features:
-✅ No installation required - works offline in any modern browser
-✅ Live preview with auto-formatting
-✅ Professional print-optimized layout
-✅ Preserves tables, lists, headings, and sections
-✅ Keyboard shortcut: Ctrl+Enter for instant preview
-
-### 📝 Alternative: Word Export
-
-For editable Word documents:
-- **Option 1**: Use Pandoc: `pandoc estimation.md -o estimation.docx`
-- **Option 2**: Copy markdown and paste into Word/Google Docs (keeps formatting)
-```
+**Alternative:** Copy markdown and paste into Word/Google Docs for editing.
 
 ---
 

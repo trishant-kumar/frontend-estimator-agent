@@ -514,16 +514,14 @@ After Content (0.93):           _____ × 0.93 = _____ hrs
 
 ---
 
-## 📊 QUICK COMPARISON
+## 📊 QUICK COMPARISON (300 base hrs)
 
-| Scenario                                              | Typical Result (300 base hrs)                      |
-| ----------------------------------------------------- | -------------------------------------------------- |
-| **Best Case** (Complete designs, modern, single lang) | 300 × 0.75 × 1.20 × 1.05 = **283 hrs**             |
-| **Standard** (Wireframes, multi-device, prod-grade)   | 300 × 0.88 × 1.20 × 1.10 = **348 hrs**             |
-| **Full Build** (No assets, multi-lang, IE11)          | 300 × 1.0 × 1.5 × 1.15 × 1.20 × 1.10 = **685 hrs** |
-| **With RBAC + Real-time** (Standard + 60hr + 40hr)    | 348 + 100 = **448 hrs** (before buffer)            |
-
-**Your scenario:** **\_\_\_\_\_\_\_\_\_\_\_\_\_\_**
+| Scenario                    | Result  |
+| --------------------------- | ------- |
+| **Best Case**               | 283 hrs |
+| **Standard**                | 348 hrs |
+| **Full Build**              | 685 hrs |
+| **With RBAC + Real-time**   | 448 hrs |
 
 ---
 

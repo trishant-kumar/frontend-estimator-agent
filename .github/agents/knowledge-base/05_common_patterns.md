@@ -682,44 +682,7 @@
 | **Modal**           | 3-5 hr     | 5-8 hr                  |
 | **WebSocket**       | 9-14 hr    | 14-21 hr                |
 
-_Note: These are BASE hours with standard multipliers applied. Additional RBAC (+20-80hr), Real-time (+5-40hr), WCAG (+50-120hr), or Third-party integrations (+2-40hr each) calculated separately._
-
----
-
-## 🧮 Quick Estimation Formula (v5.0)
-
-```
-1. Identify patterns from user requirements
-2. Match to complexity level from table above
-3. Sum all BASE pattern hours
-4. Add custom feature hours (if any)
-5. Add hidden complexity costs:
-   - RBAC: Basic +20hr, Advanced +60hr, Enterprise +80hr
-   - Real-time: Polling +5hr, WebSocket +40hr per module
-   - WCAG: AA +50hr, AAA +120hr
-   - Third-party: OAuth +10hr, Payment +25hr, Maps +15hr, etc.
-6. Apply standard multipliers:
-   - Professional dev (testing + edge cases): × 1.30
-   - Confidence buffer (includes rework): × 1.10-1.25
-7. Provide range: ±15%
-
-Example (v5.0):
-- Auth (Medium): 15 hr base
-- User CRUD (Medium): 10 hr base
-- Dashboard (Simple): 19 hr base
-- Data Table (Medium): 12 hr base
-Base Total: 56 hours
-
-+ RBAC (Basic): +20 hr
-Subtotal: 76 hours
-
-× Professional dev (1.30): 99 hours
-× Confidence buffer (1.15): 114 hours
-
-Final Range: 97-131 hours (±15%)
-
-Compare to v4.0 (same scope without RBAC would be ~95hr)
-```
+_Note: These are BASE hours with standard multipliers applied. Additional RBAC (+20-80hr), Real-time (+5-40hr), WCAG (+50-120hr), or Third-party integrations (+2-40hr each) calculated separately. **See 01_estimation_methods.md for detailed RBAC/Real-time complexity breakdowns.**_
 
 ---
 

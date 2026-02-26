@@ -247,14 +247,18 @@ const generateJSON = projectData => {
 
 **Multipliers Applied:**
 
-- Testing overhead: +15% (always included)
-- Responsive design: +20% (OPTIONAL - only if not already in base hours)
-- Risk buffer: +10% (always included)
-- **Total multiplier:** ~1.52x (with responsive) or ~1.27x (without responsive)
+- Design completeness factor: ×0.75 (complete designs) / ×0.88 (wireframes) / ×1.0 (none)
+- Testing overhead: ×1.20 (+20% for production-grade quality)
+- Confidence buffer: ×1.05-1.20 (based on requirements clarity)
+- **Typical total multiplier:** ~1.08x to 1.41x (varies by project)
 
-**Note:** API integration work (loading states, error handling, data fetching) is included in base hours, not a separate multiplier.
+**⚠️ CRITICAL - What's INCLUDED in Base Hours (NEVER multiply):**
 
-**Note:** Responsive multiplier is optional. Ask user if responsive design is part of base developer workflow or needs to be estimated separately.
+- **Responsive design** - Mobile-first CSS is standard practice (always in base)
+- **API integration** - Loading states, error handling, data fetching (always in base)
+- **Basic routing** - Navigation between pages (always in base)
+
+**Note:** If user requests "responsive design" as a separate feature, clarify that it's already included in all base hour estimates.
 
 ---
 
