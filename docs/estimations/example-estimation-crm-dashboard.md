@@ -31,14 +31,16 @@
 | ------ | -------- | ---------- | ----- |
 | **Authentication** | Login, register, forgot password, reset password, OAuth (Google/Microsoft), session management, route guards | 28 hr | JWT tokens, cookie management, auth middleware |
 | **Dashboard Overview** | KPI cards (4), line charts (revenue), bar charts (users), pie chart (categories), date range picker, real-time updates via WebSocket | 48 hr | Recharts/Chart.js, WebSocket connection (+15hr for real-time) |
-| **User Management** | User table (search, filter, sort, pagination), CRUD forms, role selector (5 roles), bulk actions (delete, export), modal dialogs, RBAC permissions | 64 hr | Includes RBAC +20hr for 5 roles, complex permissions |
+| **User Management** | User table (search, filter, sort, pagination), CRUD forms, role selector (5 roles), bulk actions (delete, export), modal dialogs | 44 hr | CRUD operations, role selector UI (RBAC logic added separately below) |
 | **Contact Management** | Contact table, CRUD forms, tags, notes, import CSV, export CSV/PDF, advanced search, filters | 52 hr | File upload for CSV import, field mapping UI |
 | **Reports** | Report builder (filters by date, user, status), table view, chart view, export PDF/CSV, save/bookmark reports | 44 hr | Client-side PDF via jsPDF, CSV generation |
 | **Settings** | User profile edit, password change, notification preferences, multi-language switcher (EN/ES/FR), theme toggle (light/dark) | 32 hr | i18n setup +15hr for 3 languages, theme system |
 | **Notifications** | Toast notifications, notification bell, notification list (mark as read), real-time via WebSocket | 24 hr | Vuetify snackbar, WebSocket listeners |
 | **Navigation & Layout** | Responsive sidebar, header with user menu, breadcrumbs, mobile drawer, loading states, error boundaries | 20 hr | Vuetify navigation components, responsive breakpoints |
 
-**Sub-Total (Base Hours)**: 312 hr
+**Sub-Total (Base Hours)**: 292 hr
+
+**Note:** RBAC complexity is added separately below as it's a cross-cutting concern affecting ALL modules, not just User Management.
 
 ---
 
@@ -71,11 +73,11 @@
 ### 🎯 Applied Multipliers
 
 **Hidden Complexity Additions:**
-- **RBAC (5 roles)**: +20 hr (role checks in components, permission middleware, dynamic UI)
-- **Real-time (WebSocket)**: +15 hr (connection management, reconnection, state sync)
+- **RBAC (5 roles)**: +20 hr (route guards across ALL modules, permission middleware, role-based UI rendering)
+- **Real-time (WebSocket)**: +15 hr (connection management, reconnection, state sync for dashboard & notifications)
 - **Multi-language (3 languages)**: +15 hr (i18n setup, translation keys, RTL support if needed)
 
-**After Additions**: 312 hr + 50 hr = **362 hr**
+**After Additions**: 292 hr + 50 hr = **342 hr**
 
 **Professional Development Overhead:**
 - **Testing + Edge Cases**: +20% → × 1.20
@@ -83,19 +85,19 @@
 - E2E tests (Playwright) - 5%
 - Edge case handling - 5%
 
-**After Testing**: 362 hr × 1.20 = **434 hr**
+**After Testing**: 342 hr × 1.20 = **410 hr**
 
 **Confidence Buffer:**
 - **Confidence Level**: 75% (good clarity, standard requirements, proven patterns)
 - **Buffer**: +10% → × 1.10
 
-**After Buffer**: 434 hr × 1.10 = **477 hr**
+**After Buffer**: 410 hr × 1.10 = **451 hr**
 
 **API Setup Overhead:**
 - **Scenario**: APIs in parallel development with frontend
 - **Overhead**: +8 hr (mock data setup, API integration coordination)
 
-**Grand Total**: 477 hr + 8 hr = **485 hr**
+**Grand Total**: 451 hr + 8 hr = **459 hr**
 
 ---
 
@@ -103,21 +105,26 @@
 
 | Category | Hours |
 | -------- | ----- |
-| **Base Hours** | 312 hr |
+| **Base Hours** (8 functional modules) | 292 hr |
 | **Hidden Complexity** (RBAC 5 roles, real-time, multi-language) | +50 hr |
-| **Professional Dev** (+20%: unit tests, E2E tests, edge cases) | +72 hr |
-| **Confidence Buffer** (+10%: moderate unknowns, standard patterns) | +43 hr |
+| **Professional Dev** (+20%: unit tests, E2E tests, edge cases) | +68 hr |
+| **Confidence Buffer** (+10%: moderate unknowns, standard patterns) | +41 hr |
 | **API Setup** (parallel development, mocks) | +8 hr |
-| **Grand Total** | **485 hr** |
+| **Grand Total** | **459 hr** |
+
+**Key Changes from Double-Counting Fix:**
+- User Management reduced from 64 hr → 44 hr (removed embedded RBAC)
+- RBAC kept as +20 hr cross-cutting addition (affects ALL modules, not just User Mgmt)
+- This prevents counting RBAC work twice
 
 ---
 
 ## 📅 TIMELINE
 
 **With 3 developers:**
-- **Total Duration**: ~1.6 months (7 weeks)
-- **Calculation**: 485 hr ÷ (3 devs × 99 productive hrs/month) = 1.63 months
-- **Sprints**: 4 × 2-week sprints
+- **Total Duration**: ~1.5 months (6.5 weeks)
+- **Calculation**: 459 hr ÷ (3 devs × 35 productive hrs/week) = 4.37 weeks × 1.5 buffer = 6.5 weeks
+- **Sprints**: 3-4 × 2-week sprints
 
 **Timeline Options:**
 - **2 developers**: 2.4 months (11 weeks) - smaller team, longer timeline
