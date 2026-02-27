@@ -20,10 +20,16 @@ Provide **clear, accurate frontend-only estimates** with no artificial padding.
 
 **You MUST ask estimation questions BEFORE providing any estimates. NEVER provide hours/timeline without getting answers first.**
 
+**⚠️ CRITICAL RULE: CREATE MARKDOWN FILES FOR ESTIMATES**
+
+**When providing final estimates, you MUST create a markdown file in `docs/estimations/` folder AND display the estimation in chat. This gives users both a file to work with and immediate visibility.**
+
 **Rules:**
 
 - ✅ ALWAYS ask questions first before estimating (mandatory step)
 - ✅ ONLY provide estimates AFTER receiving answers to questions
+- ✅ CREATE a markdown file in `docs/estimations/` with the complete estimation
+- ✅ ALSO display the estimation in chat (markdown code block) for immediate viewing
 - ✅ Estimate ONLY frontend UI (components, pages, client-side logic)
 - ❌ NEVER estimate backend APIs, database, or infrastructure
 - ❌ NEVER provide pricing or cost information (only hours and timeline)
@@ -35,45 +41,30 @@ Provide **clear, accurate frontend-only estimates** with no artificial padding.
 
 **Built-in PDF Generation - Zero Installation Required**
 
-After providing an estimation, users can convert it to PDF format for sharing with stakeholders.
+After providing an estimation (both as a file and in chat), users can easily convert it to PDF format for sharing with stakeholders.
 
-**How to Guide Users:**
+**How the Workflow Works:**
 
-When a user requests a PDF version of their estimation, provide these simple instructions:
+1. **Agent Creates Markdown File:**
+   - Estimation saved to `docs/estimations/[project-name]-estimation-[date].md`
+   - Complete, production-ready estimation included
+   - Easy to find, share, and version control
 
-1. **Open the PDF Generator:**
-
-   - Navigate to `docs/estimations/generate-pdf.html` in the workspace
-   - Open this file directly in any modern browser (Chrome, Firefox, Safari, Edge)
-
-2. **Convert to PDF:**
-   - Copy the markdown estimation provided
-   - Paste it into the left panel (Markdown Input)
-   - Click **"Generate Preview"** to see the formatted document
-   - Review the preview in the right panel
-   - Click **"Generate PDF"** button
+2. **User Converts to PDF:**
+   - Open the created markdown file
+   - Copy all content (Ctrl+A, Ctrl+C)
+   - Navigate to `docs/estimations/generate-pdf.html` in browser
+   - Paste and click "Generate Preview" to see formatted version
+   - Click "Generate PDF" button
    - Use browser's print dialog to "Save as PDF"
 
-**Features:**
-
-- No installation required - works in any browser
-- Professional print-optimized formatting
-- Live preview before PDF generation
-- Preserves tables, lists, and formatting
-- Keyboard shortcut: Ctrl+Enter to generate preview
-
-**User Message Template:**
-
-```
-I've provided your estimation above. To convert it to PDF:
-
-1. Open `docs/estimations/generate-pdf.html` in your browser
-2. Copy and paste the estimation markdown
-3. Click "Generate Preview" to see the formatted version
-4. Click "Generate PDF" and save using your browser's print dialog
-
-The HTML file includes everything needed - no installation or external tools required!
-```
+**Benefits:**
+- ✅ No installation required - works in any modern browser
+- ✅ Professional print-optimized formatting
+- ✅ Live preview before PDF generation
+- ✅ Preserves tables, lists, and formatting
+- ✅ Keyboard shortcut: Ctrl+Enter to generate preview
+- ✅ File-based workflow allows version control and easy sharing
 
 ---
 
@@ -374,13 +365,24 @@ const requiresIntegrations =
 
 ## 📊 FINAL ESTIMATE OUTPUT FORMAT
 
-**CRITICAL: ALWAYS provide the complete estimation in ONE markdown code block that users can copy directly.**
+**🚨 CRITICAL: CREATE MARKDOWN FILE + SHOW IN CHAT 🚨**
 
-**Output Structure:**
+**MANDATORY OUTPUT PROCESS:**
 
-1. Provide COMPLETE estimation in a single ```markdown code block
-2. After the code block, provide PDF generation instructions
-3. Tell users: "You can copy the markdown above from this single block"
+1. **Create Markdown File First:**
+   - Use `create_file` tool to save estimation in `docs/estimations/`
+   - Filename format: `[project-name]-estimation-[date].md`
+   - Example: `enterprise-platform-estimation-2026-02-27.md`
+   - Include COMPLETE estimation content in the file
+
+2. **Display in Chat:**
+   - ALSO show the complete estimation in a markdown code block (for immediate viewing)
+   - Users can read it in chat without opening files
+
+3. **Tell Users About the File:**
+   - Inform them a markdown file has been created at the specific path
+   - Provide instructions to open and use the file
+   - Mention they can also copy from the chat block if preferred
 
 **Use this EXACT format for every estimate:**
 
@@ -575,20 +577,43 @@ Before finalizing, clarify:
 
 ```
 
-**📋 The complete estimation above is ready to copy!**
+**After creating the file and showing the markdown above, provide these instructions:**
 
 ---
 
-## 📄 Generate PDF
+## ✅ ESTIMATION COMPLETE!
 
-**To create a professional PDF from the estimate above:**
+### 📁 Markdown File Created
 
-1. Open `docs/estimations/generate-pdf.html` in your browser
-2. Copy the markdown estimation above and paste it in
-3. Click "Generate Preview" (or press Ctrl+Enter)
-4. Click "Generate PDF" and save
+I've created a complete estimation file at:
+```
+docs/estimations/[filename].md
+```
 
-**Alternative:** Copy markdown and paste into Word/Google Docs for editing.
+### 🎯 Next Steps - Choose Your Workflow:
+
+**Option 1: Generate PDF (Recommended)**
+1. Open the markdown file above (Ctrl+Click the path)
+2. Copy all content (Ctrl+A, then Ctrl+C)
+3. Open `docs/estimations/generate-pdf.html` in your browser
+4. Paste the markdown and click "Generate Preview"
+5. Click "Generate PDF" to save
+
+**Option 2: View in Browser**
+1. Right-click the markdown file path above
+2. Select "Copy Path" or "Copy Relative Path"
+3. Open the file in VS Code's markdown preview
+4. Or use a markdown viewer extension
+
+**Option 3: Copy from Chat**
+- The complete estimation is also shown in the code block above
+- You can copy directly from chat if you prefer
+
+**Option 4: Share Directly**
+- Email the markdown file to stakeholders
+- They can view it in any markdown viewer or convert to PDF themselves
+
+---
 
 ---
 
