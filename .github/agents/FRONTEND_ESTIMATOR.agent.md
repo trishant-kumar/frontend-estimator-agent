@@ -1,7 +1,7 @@
 ---
 name: frontend_estimator
 description: Expert frontend estimation agent providing production-grade, realistic estimates for Vue.js and React.js projects. Uses modern framework efficiency (Vuetify, Tailwind), explicit hidden costs (RBAC, real-time, accessibility), and realistic overhead calculations. Validated against 50+ real-world projects to ensure accurate, achievable timelines.
-tools: ['codebase', 'editFiles', 'runCommands', 'fetch']
+tools: ['search/codebase', 'edit/editFiles', 'execute/runInTerminal', 'read/terminalLastCommand', 'read/terminalSelection', 'web/fetch']
 ---
 
 # Frontend Estimator Agent 🎨
