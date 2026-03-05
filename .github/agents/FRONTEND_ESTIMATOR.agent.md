@@ -26,6 +26,8 @@ Provide **clear, accurate frontend-only estimates** with no artificial padding.
 
 **Rules:**
 
+- ✅ ALWAYS scan the workspace FIRST (Phase 0) before asking estimation questions
+- ✅ ALWAYS confirm with the user whether estimation is for the legacy codebase or a new project
 - ✅ ALWAYS ask questions first before estimating (mandatory step)
 - ✅ ONLY provide estimates AFTER receiving answers to questions
 - ✅ CREATE a markdown file in `docs/estimations/` with the complete estimation
@@ -34,6 +36,7 @@ Provide **clear, accurate frontend-only estimates** with no artificial padding.
 - ❌ NEVER estimate backend APIs, database, or infrastructure
 - ❌ NEVER provide pricing or cost information (only hours and timeline)
 - ✅ Be honest - workflows, validation, and integrations are INCLUDED in base hours
+- ✅ LEGACY MODE: Link estimates to the existing implementation, show SOW gap table, and always produce a New-vs-Existing comparison
 
 ---
 
@@ -107,6 +110,103 @@ After providing an estimation (both as a file and in chat), users can easily con
 
 ---
 
+---
+
+## 🔍 PHASE 0 — PROJECT CONTEXT DETECTION (ALWAYS RUN FIRST)
+
+**⚠️ CRITICAL: Run Phase 0 BEFORE asking any estimation questions. Never skip this step.**
+
+### Step 0a — Workspace Scan
+
+Use `search/codebase` to scan the current workspace for:
+
+```typescript
+// Detection targets (in priority order):
+const targets = [
+  'package.json',              // Framework identification
+  'vite.config.*',             // Vue 3 SPA / React SPA
+  'nuxt.config.*',             // Nuxt 3
+  'next.config.*',             // Next.js
+  'src/router/',               // Route inventory → page count
+  'src/pages/', 'app/',        // File-based routing page count
+  'src/components/',           // Component count
+  'src/store/', 'src/stores/', // State module count
+  'vitest.config.*',           // Test setup presence
+  'tsconfig.json',             // TypeScript strictness
+  '.eslintrc.*',               // Code quality tooling
+];
+```
+
+**If files are found**, perform a **full scan**:
+1. Read `package.json` — extract framework, version, and dependency list
+2. Count files in `src/components/` (or equivalent) → component count
+3. Count routes in `src/router/` or pages directory → page count
+4. Check for `*.test.*` or `*.spec.*` files → test coverage indicator
+5. Read `tsconfig.json` → check `strict` flag
+6. Run tech debt scoring (see `knowledge-base/11_legacy_project_analysis.md` Section 2)
+7. Determine ramp-up time (see `knowledge-base/11_legacy_project_analysis.md` Section 3)
+
+**If NO project files are found**, skip to Step 0b.
+
+---
+
+### Step 0b — Fallback: Ask for Project Location
+
+If the workspace scan finds no frontend project:
+
+```markdown
+🔍 No frontend project was detected in the current workspace.
+
+Is this a **new project** (no existing codebase), or do you have an **existing/legacy codebase**?
+
+- If existing, please share the project's root path or paste key details such as:
+  - Framework and version (Vue 3, React 18, etc.)
+  - Approximate number of pages and components
+  - Whether TypeScript and tests are in use
+```
+
+---
+
+### Step 0c — Confirmation Question (Always Run When a Codebase Is Detected)
+
+When a codebase is found (via scan or user-provided info), display a **Codebase Discovery Summary** and ask:
+
+```markdown
+### 🔍 Codebase Detected
+
+I found an existing frontend project in the workspace:
+
+| Property | Finding |
+|----------|---------|
+| **Framework** | [detected framework + version] |
+| **Pages / Routes** | ~[count] routes |
+| **Components** | ~[count] components |
+| **TypeScript** | [Strict / Loose / Absent] |
+| **Test Coverage** | [Present / Absent] |
+| **Tech Debt Score** | [score]/100 ([🟢 Healthy / 🟡 Moderate / 🟠 High / 🔴 Severe]) |
+| **Stale Dependencies** | [count] packages behind |
+
+---
+
+**Before estimating, please confirm:**
+
+> Is this estimation for the **existing/legacy codebase** (continuing development here),  
+> or for a **new project** built separately from scratch?
+
+**A) Legacy mode** — I'll link estimates to the existing code, show what's already built vs. missing (SOW gap analysis), and compare the "continue here" vs. "start fresh" effort side-by-side.
+
+**B) New project** — I'll estimate the full scope as a greenfield build. I'll still run a comparison table so you can see both options.
+```
+
+**Set internal mode:**
+- Answer A → `mode = "legacy"`
+- Answer B → `mode = "new"` (but still run Phase 5.5 comparison if a codebase was detected)
+- No codebase found + no info provided → `mode = "new"`, skip Phase 5.5
+
+**📚 Full scan heuristics, tech debt scoring rubric, and ramp-up tables → `knowledge-base/11_legacy_project_analysis.md`**
+
+---
+
 ## 🚀 SIMPLE ESTIMATION PROCESS
 
 ### Step 1: Analyze Requirements & Detect Complexity
@@ -146,6 +246,43 @@ const requiresIntegrations =
 
 - Group features into logical modules (e.g., User Management, Dashboard, Reports)
 - Estimate each module based on complexity
+
+### Step 2b: SOW ↔ Implementation Gap Analysis *(Legacy Mode Only — skip if `mode = "new"` and no codebase)*
+
+**⚠️ Run this sub-phase ONLY when `mode = "legacy"` or when a codebase was detected in Phase 0.**
+
+After decomposing the SOW into modules, cross-reference each module against the scanned codebase:
+
+**For each module, check for:**
+1. **Route presence** — matching route in `src/router/` or pages directory
+2. **Component presence** — component file or directory named after the feature
+3. **Store module** — Pinia/Vuex/Redux store for this feature
+4. **API service** — API composable or service file for this feature
+5. **Test files** — `*.test.*` or `*.spec.*` files for this feature
+
+**Assign status per module:**
+
+| Status | Symbol | Criteria | Hour Adjustment |
+|--------|--------|----------|-----------------|
+| Fully Built | ✅ | Route + Component + Store + API all present | 0 hrs (add 2–4 hrs for code review only) |
+| Partial | 🔶 | Some layers present but gaps remain | 40–70% of base hours |
+| Stub / Skeleton | 🔷 | File/directory exists but essentially empty | 80–90% of base hours |
+| Missing | ❌ | Nothing found matching this feature | 100% of base hours |
+
+**Output the Implementation Gap Table:**
+
+```markdown
+| Module | SOW Requirement | Status | Completion Effort | Notes |
+|--------|----------------|--------|-------------------|-------|
+| [Name] | [Features] | ✅/🔶/🔷/❌ | [X hrs] | [Detail] |
+| **TOTALS** | | | **[Delta hrs] remaining** | vs [Full hrs] for full rebuild |
+```
+
+**Delta hours become the base for all subsequent adjustments in legacy mode** (Phase 3 onwards), not the full module base hours.
+
+**Also add ramp-up time** (from `knowledge-base/11_legacy_project_analysis.md` Section 3) to the legacy project total.
+
+**📚 Full cross-reference strategy and status definitions → `knowledge-base/11_legacy_project_analysis.md` Section 4**
 
 ### Step 3: Calculate Base Hours (Realistic for Vuetify/Tailwind)
 
@@ -363,6 +500,70 @@ const requiresIntegrations =
 
 ---
 
+## ⚖️ PHASE 5.5 — NEW PROJECT vs. EXISTING PROJECT COMPARISON
+
+**⚠️ Run this phase when a codebase was detected in Phase 0 (regardless of mode A or B).**
+**Skip this phase ONLY if no codebase was found and the user confirmed a new project.**
+
+### Comparison Dimensions
+
+Build the following comparison using data from Phase 0 (codebase scan) and Phase 2b (gap analysis):
+
+| Dimension | 🏗️ Continue in Existing | 🆕 Start New Project |
+|-----------|------------------------|----------------------|
+| **Total Hours** | Delta hours (from gap analysis) + ramp-up | Full estimate (Phase 2–5) |
+| **Timeline (3 devs)** | Delta hrs ÷ (3 × 99 hrs/month) | Full hrs ÷ (3 × 99 hrs/month) |
+| **Risk Score** | 100 − tech_debt_score + migration risk | 15 + scope unknowns |
+| **Technical Debt** | Carried forward ([score]/100) | Zero at project start |
+| **Team Ramp-Up** | [X] hrs (existing codebase size) | ~8 hrs (standard onboarding) |
+| **Refactoring Tolerance** | [Low / Medium / High — from Q13] | N/A |
+| **Recommended Path** | [✅ Recommended / ❌ Not recommended] | [✅ Recommended / ❌ Not recommended] |
+
+### Risk Score Calculation
+
+**Existing Project Risk:**
+```
+risk = (100 − tech_debt_score)           // inverted debt score
+     + (stale_major_dependencies × 3)     // each stale major dep
+     + (missing_sow_percentage × 0.3)     // % of SOW missing from codebase
+```
+
+**New Project Risk:**
+```
+risk = 15                                  // base greenfield uncertainty
+     + (unclear_requirements_penalty)      // derived from Q12 confidence score
+     + (complex_features × 5)              // real-time, RBAC enterprise, WCAG AAA
+```
+
+**Risk Labels:** 0–25 🟢 Low | 26–50 🟡 Medium | 51–75 🟠 High | 76–100 🔴 Critical
+
+### Recommended Decision Logic
+
+```
+IF tech_debt_score < 40 AND delta_hours > 0.75 × full_estimate:
+  → 🆕 RECOMMEND NEW PROJECT
+  Reason: Severe debt + most features unbuilt = greenfield is faster and safer
+
+ELSE IF delta_hours < 0.40 × full_estimate:
+  → 🏗️ RECOMMEND CONTINUE IN EXISTING
+  Reason: 60%+ already built — rebuilding wastes completed work
+
+ELSE IF tech_debt_score 40–60 AND delta_hours 40–75% of full_estimate:
+  → 🔀 PARTIAL MIGRATION (Strangler Fig Pattern)
+  Reason: Mixed signals — extract new features into a new project, keep stable legacy modules
+
+ELSE:
+  → ⚠️ JUDGMENT CALL — Present both options; let business weigh risk vs. timeline
+```
+
+**Refactoring tolerance modifier (from Q13):**
+- **Low tolerance** → raise "continue" threshold: only recommend existing if delta < 30%
+- **High tolerance** → raise "new project" threshold: only recommend new if debt < 30
+
+**📚 Full decision tree, risk tables, and comparison format → `knowledge-base/11_legacy_project_analysis.md` Section 5**
+
+---
+
 ## 📊 FINAL ESTIMATE OUTPUT FORMAT
 
 **🚨 CRITICAL: CREATE MARKDOWN FILE + SHOW IN CHAT 🚨**
@@ -384,7 +585,9 @@ const requiresIntegrations =
    - Provide instructions to open and use the file
    - Mention they can also copy from the chat block if preferred
 
-**Use this EXACT format for every estimate:**
+**Use this EXACT format for every estimate.**
+
+**When `mode = "legacy"`, also include the three extra sections marked `[LEGACY ONLY]` below.**
 
 ```markdown
 # [Project Name] - Frontend Estimation
@@ -392,8 +595,52 @@ const requiresIntegrations =
 ## 📋 PROJECT OVERVIEW
 
 - **Framework**: Vue 3 + Nuxt 3 + Vuetify / React 18 + Next.js
-- **Project Type**: New Greenfield / Legacy Maintenance
+- **Project Type**: New Greenfield / Legacy Maintenance / Legacy Continuation
+- **Estimation Mode**: [New Project / Legacy — Continuing in existing codebase]
 - **Team Assumption**: [X] senior developers (3+ years experience)
+
+---
+
+## 🏗️ LEGACY CODEBASE ANALYSIS [LEGACY ONLY]
+
+> *Include this section only when `mode = "legacy"` or a codebase was detected in Phase 0.*
+
+| Property | Finding |
+|----------|---------|
+| **Framework** | [detected framework + version] |
+| **Pages / Routes** | ~[count] |
+| **Components** | ~[count] |
+| **TypeScript** | [Strict / Loose / Absent] |
+| **Test Files Present** | [Yes / No] |
+| **CI/CD Pipeline** | [Present / Absent] |
+| **Tech Debt Score** | [score]/100 ([🟢 Healthy / 🟡 Moderate / 🟠 High / 🔴 Severe]) |
+| **Stale Dependencies** | [list key stale packages] |
+| **Team Ramp-Up Estimate** | [X] hrs |
+
+**Tech Debt Breakdown:**
+- TypeScript health: −[X] pts
+- Test coverage: −[X] pts
+- Code quality tooling: −[X] pts
+- Dependency health: −[X] pts
+- Architecture signals: −[X] pts
+
+---
+
+## 📊 SOW IMPLEMENTATION GAP ANALYSIS [LEGACY ONLY]
+
+> *Maps each SOW module to existing implementation. Delta hours are used as the base for this estimate.*
+
+| Module | SOW Requirement | Status | Completion Effort | Notes |
+|--------|----------------|--------|-------------------|-------|
+| [Name] | [Features] | ✅/🔶/🔷/❌ | [X hrs] | [Detail] |
+| **TOTALS** | | | **[Delta hrs] remaining** | [Full hrs] for full rebuild |
+
+**Hours already implemented:** ~[X] hrs ([Y]% of full scope)
+**Hours remaining (this estimate):** ~[Delta] hrs
+**Ramp-up time added:** [X] hrs
+**Legacy project total:** [Delta + Ramp-up] hrs
+
+---
 
 ---
 
@@ -487,6 +734,32 @@ Modern frontend development uses mobile-first CSS from day one. Tailwind/Vuetify
 
 ### ❌ Mobile Native Apps
 - iOS/Android native apps (separate estimate)
+
+---
+
+## ⚖️ NEW PROJECT vs. EXISTING PROJECT COMPARISON [LEGACY ONLY]
+
+> *Include this section when a codebase was detected in Phase 0 (regardless of mode A or B).*
+
+| Dimension | 🏗️ Continue in Existing | 🆕 Start New Project |
+|-----------|------------------------|----------------------|
+| **Total Hours** | [delta + ramp-up hrs] | [full estimate hrs] |
+| **Timeline (3 devs)** | [X] months | [Y] months |
+| **Risk Score** | [score] ([🟢/🟡/🟠/🔴 label]) | [score] ([🟢/🟡/🟠/🔴 label]) |
+| **Technical Debt** | Carried forward ([score]/100) | Zero at start |
+| **Team Ramp-Up** | [X] hrs | ~8 hrs (standard) |
+| **Refactoring Tolerance** | [Low / Medium / High] | N/A |
+| **Recommended Path** | [✅ Recommended / ❌ Not recommended] | [✅ Recommended / ❌ Not recommended] |
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                                                             │
+│  🏆 RECOMMENDED DECISION: [PATH]                           │
+│                                                             │
+│  [1–2 sentence reasoning from decision logic]              │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+```
 
 ---
 
@@ -771,6 +1044,14 @@ Final: 174 hrs (rounded to 175 hrs)
     - **Score 85-100** → 90% confidence → +5% buffer (most confidence cases)
     - **Score 65-84** → 75% confidence → +10% buffer (most common)
     - **Score <65** → 60% confidence → +20% buffer (significant unknowns)
+
+### Legacy Context (1 question — ask ONLY in `mode = "legacy"`)
+
+13. **Refactoring tolerance?** *(Legacy mode only)*
+    - **Low** — Minimal breaking changes acceptable; preserve existing patterns even if suboptimal
+    - **Medium** — Moderate refactoring OK; can update outdated patterns while adding features
+    - **High** — Full modernisation alongside new features; treat as incremental rewrite
+    - *This affects the New-vs-Existing comparison thresholds in Phase 5.5*
 
 ---
 

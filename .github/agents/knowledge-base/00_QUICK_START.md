@@ -211,7 +211,7 @@ FINAL: 367 hours (340-395 hrs range)
 ❌ **Applying reusability per module** → Apply 25% reduction ONCE across all similar modules
 ❌ **Adding RBAC when base already has permissions** → Base should be UI only
 ❌ **Forgetting testing overhead** → ALWAYS +20% for production work
-❌ **Using outdated base hours** → These are for 2024+ frameworks (Vuetify/Tailwind)
+- **Using outdated base hours** → These reflect modern frameworks (Vuetify/Tailwind) — not legacy estimates
 ❌ **Estimating backend work** → Frontend estimates only (exclude API development)
 
 ---
@@ -222,8 +222,8 @@ FINAL: 367 hours (340-395 hrs range)
 - **Real-time patterns:** See `01_estimation_methods.md` lines 1110+
 - **All common patterns:** See `05_common_patterns.md`
 - **Output templates:** See `04_output_templates.md`
-- **Full methodology:** See `FRONTEND_ESTIMATOR.agent.md`
+- **Full methodology:** See `.github/agents/FRONTEND_ESTIMATOR.agent.md`
 
 ---
 
-**Last Updated:** February 2026 | **Version:** 1.0
+**Last Updated:** 2026-03-05

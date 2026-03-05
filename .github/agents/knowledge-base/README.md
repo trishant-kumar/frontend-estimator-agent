@@ -4,14 +4,22 @@ This directory contains modular knowledge bases for the Frontend Estimator agent
 
 ## 📁 Module Structure
 
-| Module                         | Purpose                                             | Size   | Priority   |
-| ------------------------------ | --------------------------------------------------- | ------ | ---------- |
-| **01_estimation_methods.md**   | PERT, T-shirt sizing, story points, velocity        | Medium | Core       |
-| **02_scope_dependencies.md**   | Frontend vs backend, API dependencies, exclusions   | Small  | Critical   |
-| **03_technology_reference.md** | Vue/React patterns, component estimates, frameworks | Large  | Reference  |
-| **04_output_templates.md**     | CSV/JSON/PDF formats, export structures             | Medium | Tooling    |
-| **05_common_patterns.md**      | CRUD, auth, dashboards, tables - reusable estimates | Large  | Reference  |
-| **06_rapid_estimation.md**     | T-shirt sizing, quick methods, 5-30 min estimates   | Medium | Time-Saver |
+Files are numbered in the order they are loaded during an estimation session.
+
+| Module                              | Purpose                                             | Size   | Priority   |
+| ----------------------------------- | --------------------------------------------------- | ------ | ---------- |
+| **00_QUICK_START.md**               | 5-step formula, common pattern hours, quick examples| Small  | Core       |
+| **01_estimation_methods.md**        | PERT, T-shirt sizing, story points, velocity        | Medium | Core       |
+| **02_scope_dependencies.md**        | Frontend vs backend, API dependencies, exclusions   | Small  | Critical   |
+| **03_technology_reference.md**      | Vue/React patterns, component estimates, frameworks | Large  | Reference  |
+| **04_output_templates.md**          | CSV/JSON/PDF formats, export structures             | Medium | Tooling    |
+| **05_common_patterns.md**           | CRUD, auth, dashboards, tables - reusable estimates | Large  | Reference  |
+| **06_rapid_estimation.md**          | T-shirt sizing, quick methods, 5-30 min estimates   | Medium | Time-Saver |
+| **07_document_parsing.md**          | SOW/PRD analysis strategies                         | Medium | Reference  |
+| **08_senior_architect_analysis.md** | Architecture review, tech choices                   | Medium | Reference  |
+| **09_project_type_detection.md**    | Greenfield vs legacy, project-type heuristics       | Small  | Core       |
+| **10_WORKED_EXAMPLES.md**           | End-to-end worked estimation examples               | Large  | Reference  |
+| **11_legacy_project_analysis.md**   | Codebase scanning, tech debt scoring, SOW gap analysis, new-vs-existing comparison | Large | **Conditional** |
 
 ## 🎯 Design Principles
 
@@ -55,6 +63,9 @@ User needs: Vue 3 component estimates
 
 User asks: "Quick 5-minute estimate"
 → "Refer to knowledge-base/06_rapid_estimation.md section 'T-Shirt Sizing'"
+
+User triggers Phase 0 (codebase detected OR mode = legacy)
+→ "Load knowledge-base/11_legacy_project_analysis.md — full scan heuristics, tech debt scoring, SOW gap linking, and new-vs-existing comparison"
 ```
 
 ## 🔄 Maintenance Guidelines
@@ -67,15 +78,15 @@ User asks: "Quick 5-minute estimate"
 - **04_output_templates.md**: New export format requested
 - **05_common_patterns.md**: New common pattern identified (3+ uses)
 - **06_rapid_estimation.md**: Faster methods discovered
+- **11_legacy_project_analysis.md**: Dependency version tables outdated; new tech debt signals identified; decision logic thresholds need calibration
 
-### Version Control
+### Change Tracking
 
-Each module should include:
+Each module should include a header block:
 
 ```markdown
 ---
 Last Updated: YYYY-MM-DD
-Version: X.Y
 Author: [Name]
 Change Summary: [What changed]
 ---
@@ -87,7 +98,8 @@ Change Summary: [What changed]
 2. **Agent determines** what user needs
 3. **Loads specific module(s)** as needed
 4. **Processes** using module knowledge
-5. **Returns** estimation to user6. **User feedback** → Update relevant module
+5. **Returns** estimation to user
+6. **User feedback** → Update relevant module
 
 ## 📊 Module Metrics
 

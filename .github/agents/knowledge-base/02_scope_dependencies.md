@@ -1,6 +1,5 @@
 ---
 Module: Scope & Dependencies
-Version: 1.0
 Last Updated: 2026-02-23
 Purpose: Define what IS and ISN'T frontend work, API dependencies, exclusions
 ---

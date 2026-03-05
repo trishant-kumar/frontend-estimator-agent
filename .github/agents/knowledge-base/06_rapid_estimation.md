@@ -1,6 +1,5 @@
 ---
 Module: Rapid Estimation Techniques
-Version: 1.0
 Last Updated: 2026-02-23
 Purpose: Fast estimation methods for quick turnaround (5-30 minutes)
 ---

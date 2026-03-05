@@ -1,90 +1,64 @@
-# GitHub Copilot Configuration
+# GitHub Copilot Setup Guide
 
-This project includes comprehensive GitHub Copilot instructions to provide the best AI-assisted development experience for the CareLink360 web admin application.
+This guide covers how to set up and use the **Frontend Estimator Agent** (`@frontend_estimator`) in VS Code with GitHub Copilot.
+
+---
 
 ## Setup
 
-1. **Install Required Extensions** (automatically prompted when opening the project):
+### 1. Install Required VS Code Extensions
 
-   - GitHub Copilot
-   - GitHub Copilot Chat
-   - Vue Language Features (Volar)
-   - TypeScript Vue Plugin
-   - ESLint
-   - Prettier
-   - Tailwind CSS IntelliSense
+These extensions are recommended for the best experience:
 
-2. **VSCode Configuration**: The project includes optimized VSCode settings for:
+- **GitHub Copilot** — Core AI assistant
+- **GitHub Copilot Chat** — Chat interface for agents
+- **Markdown Preview Enhanced** — Preview estimation output files
+- **Markdown All in One** — Editing markdown estimation documents
 
-   - Copilot integration
-   - Vue/Nuxt development
-   - TypeScript support
-   - Auto-formatting and linting
-   - File nesting and organization
+### 2. Activate the Agent
 
-3. **Available Tasks** (Ctrl+Shift+P → "Tasks: Run Task"):
-   - `dev` - Start development server
-   - `build` - Build for production
-   - `lint` - Run ESLint
-   - `lint:fix` - Fix ESLint issues
-   - `type-check` - Run TypeScript checks
-   - `preview` - Preview production build
-   - `clean` - Clean build artifacts
+Once GitHub Copilot Chat is open, call the agent with:
 
-## Copilot Instructions
-
-The Copilot instructions file (`.github/copilot-instructions.md`) includes:
-
-- **Project Overview**: Framework, architecture, and key technologies
-- **Authentication Patterns**: Dual auth system (main app + reports)
-- **Validation with Zod**: Form validation and TypeScript integration
-- **Component Architecture**: Atomic Design patterns
-- **Store Patterns**: Pinia state management
-- **Common Utilities**: Date handling, error handling, API services
-- **Code Style Guidelines**: TypeScript interfaces, props/emits, error handling
-
-## Key Features
-
-### Authentication Context
-
-- Main app routes use `useAuthStore()`
-- Reports routes use `useReportStore()`
-- Global auth middleware handles route protection
-
-### Form Validation
-
-- Zod schemas for all form validation
-- TypeScript interfaces derived from Zod schemas
-- Proper error handling and user feedback
-
-### Component Structure
-
-```
-components/
-  atoms/        # Basic UI elements
-  molecules/    # Simple combinations
-  organisms/    # Complex sections
-  templates/    # Page layouts
+```bash
+@frontend_estimator [your project description or pasted SOW]
 ```
 
-### Development Best Practices
+### 3. Agent File Location
 
-- Type safety with Zod validation
-- Proper error handling
-- Loading states for async operations
-- Responsive design with Tailwind
-- Accessibility considerations
-- XML response handling with xmlToObj utility
+The agent definition is at:
 
-## Usage Tips
+```
+.github/agents/FRONTEND_ESTIMATOR.agent.md
+```
 
-1. **Chat with Context**: Use Copilot Chat to ask questions about the project structure, patterns, and conventions
-2. **Code Generation**: Copilot will generate code following project patterns automatically
-3. **Validation**: Always use Zod schemas for form validation and API responses
-4. **Authentication**: Check which auth store to use based on route context
-5. **Components**: Follow atomic design principles when creating new components
+If the agent is not responding, verify this file exists and that GitHub Copilot extensions are active.
 
-The configuration ensures Copilot understands your project's specific patterns and will provide suggestions that align with your existing codebase.
+---
+
+## How the Agent Works
+
+The agent runs in 6 phases every time it is invoked:
+
+| Phase | What Happens |
+|-------|-------------|
+| **Phase 0** | Scans the workspace for an existing codebase. Confirms whether estimation is for legacy or new project. |
+| **Phase 1** | Asks up to 13 clarifying questions (only relevant ones based on auto-detected complexity). |
+| **Phase 2** | Breaks requirements into modules, assigns base hours. In legacy mode, runs SOW gap analysis. |
+| **Phase 3–5** | Applies reusability reduction, strategic multipliers, RBAC/real-time/integration overheads, and confidence buffer. |
+| **Phase 5.5** | *Legacy mode only* — Produces new-project vs. existing-project comparison table with recommended path. |
+| **Phase 6** | Creates `docs/estimations/[project]-estimation-[date].md` AND displays the estimate in chat. |
+
+---
+
+## Generating a PDF
+
+1. Open the created `.md` file in `docs/estimations/`
+2. Copy all content (Ctrl+A → Ctrl+C)
+3. Open `docs/estimations/generate-pdf.html` in your browser
+4. Paste the markdown and click **Generate Preview**
+5. Click **Generate PDF** → browser print dialog → **Save as PDF**
+
+No installation required — the HTML generator works fully offline.
 
 ---
 
@@ -92,72 +66,71 @@ The configuration ensures Copilot understands your project's specific patterns a
 
 ### Agent Not Responding
 
-- **Check agent name**: Use `@frontend_estimator` (not `@frontend-estimator`)
-- **Verify file exists**: Ensure `.github/agents/FRONTEND_ESTIMATOR.agent.md` is present
-- **Restart editor**: Restart VS Code and reload GitHub Copilot extension
-- **Check Copilot status**: Ensure GitHub Copilot is logged in and active
+- **Check agent name**: Use `@frontend_estimator` (not `@frontend-estimator` with a hyphen)
+- **Verify file exists**: Confirm `.github/agents/FRONTEND_ESTIMATOR.agent.md` is present
+- **Restart editor**: Restart VS Code and reload the GitHub Copilot extension
+- **Check Copilot status**: Ensure GitHub Copilot is signed in and active (check bottom status bar)
 
 ### PDF Generator Not Working
 
-- **File missing**: Ensure `docs/estimations/generate-pdf.html` exists in your project
-- **Browser compatibility**: Use modern browser (Chrome 90+, Firefox 88+, Safari 14+, Edge 90+)
-- **JavaScript errors**: Open browser DevTools (F12) → Console to check for errors
-- **Print dialog**: Ensure browser print dialog appears when clicking "Generate PDF"
-- **Offline mode**: Generator works offline - no internet connection required
+- **File missing**: Verify `docs/estimations/generate-pdf.html` exists in the project
+- **Browser compatibility**: Use a modern browser (Chrome, Firefox, Edge, or Safari — current versions)
+- **JavaScript errors**: Open browser DevTools (F12) → Console tab to check for errors
+- **Print dialog**: Ensure the browser print dialog opens when clicking "Generate PDF"
+- **Offline mode**: The generator works without internet — no external dependencies
 
-### Estimations Seem High
+### Estimates Seem Too High
 
-- **Realistic estimates**: Agent uses production-grade estimates (not "best case" scenarios)
-- **Includes overhead**: Testing (+20%), edge cases, code review, and rework buffer
-- **Senior velocity**: Based on experienced developers (3+ years), not junior developers
-- **Professional quality**: Includes proper error handling, loading states, validation, responsive design
-- **Compare baseline**: Check base hours before overhead (buffer may be confidence-related)
+- Agent uses **production-grade estimates** — not best-case scenarios
+- Includes **+20% overhead** for testing (unit + E2E), edge cases, code review, and rework buffer
+- Based on **senior developer velocity** (3+ years experience with the framework)
+- Includes all professional practices: validation, loading states, error handling, responsive design
 
-### Estimations Seem Low
+### Estimates Seem Too Low
 
-- **Hidden complexity**: Verify RBAC, real-time features, WCAG compliance, integrations are included
-- **Check assumptions**: Confirm APIs ready, designs complete, team has framework experience
-- **Missing modules**: Ensure all features/modules are listed in requirements
-- **Scope exclusions**: Remember backend, DevOps, manual QA, infrastructure are NOT included
-- **Framework efficiency**: Modern frameworks (Vue 3, React 18) with UI libraries are faster to develop
+- Verify **RBAC, real-time features, WCAG compliance, and third-party integrations** are mentioned in requirements — agent detects these automatically from keywords
+- Check that all modules/features are included in the requirements
+- Remember that backend, DevOps, infrastructure, and manual QA are excluded from scope
 
-### Export Files Not Generated
+### Estimation File Not Created
 
-- **Check directory**: Files are saved to `docs/estimations/` folder
-- **Permissions**: Ensure write permissions for the workspace directory
-- **File naming**: Look for `estimation_[ProjectName]_[Date].md/csv/json`
-- **Agent tools**: Verify agent has `create_file` tool enabled in configuration
-
-### PDF Output Formatting Issues
-
-- **Markdown syntax**: Ensure proper markdown formatting (tables need pipes `|`, headers need `#`)
-- **Browser zoom**: Reset browser zoom to 100% before generating PDF
-- **Print margins**: Adjust print margins in browser print dialog if content is cut off
-- **Page breaks**: For long documents, check "Background graphics" option in print settings
+- Check `docs/estimations/` folder — the file is saved there automatically
+- File naming format: `[project-name]-estimation-[YYYY-MM-DD].md`
+- Ensure the agent has the `edit/editFiles` tool enabled in the agent frontmatter
 
 ### Agent Asks Too Many Questions
 
-- **Provide more details**: Give comprehensive requirements upfront to reduce clarification questions
-- **Specify framework**: Mention Vue/React explicitly to skip framework selection
-- **Include tech stack**: List UI library (Vuetify/Tailwind) and state management approach
-- **Attach designs**: Reference design completeness, API readiness, and device targets
+- Provide comprehensive requirements upfront to skip obvious questions
+- Mention the framework explicitly (Vue 3 / React 18 / Nuxt 3 / Next.js)
+- State API readiness, design completeness, and device targets in the initial request
+- Attach or paste the full SOW/PRD document for complex projects
 
-### Validation or Zod Issues
+### Legacy Mode Not Triggering
 
-- **Schema definition**: Ensure Zod schemas are defined before TypeScript interfaces
-- **Import statement**: Check `import { z } from 'zod'` is present
-- **Type inference**: Use `z.infer<typeof schema>` for TypeScript types
-- **Error messages**: Provide user-friendly error messages in schema definitions
-- **Async validation**: Use `.refine()` for custom async validation logic
+- The agent auto-scans the workspace in Phase 0 — open the project that contains the legacy codebase in VS Code before invoking the agent
+- If the scan misses it, provide the project details directly: framework, approximate component count, TypeScript usage, test coverage
 
 ---
 
-## Getting Help
+## Knowledge Base Files
 
-If issues persist:
+The agent uses these reference modules (located in `.github/agents/knowledge-base/`):
 
-1. **Check documentation**: Review `.github/agents/README.md` and knowledge base files
-2. **Test with simple example**: Try `@frontend_estimator Vue 3 admin panel with user CRUD`
-3. **Verify setup**: Confirm all VSCode extensions are installed and active
-4. **Review agent logs**: Check VS Code Output panel → GitHub Copilot for errors
-5. **Provide feedback**: Report issues with specific examples and error messages
+| # | File | When It Is Used |
+|---|------|----------------|
+| 00 | `00_QUICK_START.md` | Quick pattern hours reference |
+| 01 | `01_estimation_methods.md` | PERT calculations, detailed methodology |
+| 02 | `02_scope_dependencies.md` | Scope boundary questions |
+| 03 | `03_technology_reference.md` | Framework-specific component estimates |
+| 04 | `04_output_templates.md` | CSV/JSON export formatting |
+| 05 | `05_common_patterns.md` | Standard module pattern lookup |
+| 06 | `06_rapid_estimation.md` | Fast T-shirt sizing |
+| 07 | `07_document_parsing.md` | SOW/PRD document analysis |
+| 08 | `08_senior_architect_analysis.md` | Architecture and tech-choice review |
+| 09 | `09_project_type_detection.md` | Greenfield vs legacy detection |
+| 10 | `10_WORKED_EXAMPLES.md` | Reference examples |
+| 11 | `11_legacy_project_analysis.md` | *Loaded only in legacy mode* — codebase scanning, tech debt scoring, gap analysis, new-vs-existing comparison |
+
+---
+
+**Last Updated**: 2026-03-05
